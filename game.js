@@ -1,7 +1,7 @@
-const tileSize = 50;   //Width of a tile (in pixels)
-const width = 10;      //Board width (in tiles)
-const height = 10;     //Board height (in tiles)
-const bombAmount = 5; //Amount of bombs
+const tileSize = 20;   //Width of a tile (in pixels)
+const width = 30;      //Board width (in tiles)
+const height = 30;     //Board height (in tiles)
+const bombAmount = 100; //Amount of bombs
 
 let board = []; //can be 'bomb' or 'empty'
 
