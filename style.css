@@ -1,0 +1,30 @@
+.grid {
+    margin-right: auto;
+    margin-left: auto;
+    display: flex;
+    flex-wrap: wrap;
+    background-color:magenta;
+}
+
+.clicked-bomb {
+    background-color: red!important;
+}
+
+.clicked-empty {
+    background-color: black!important;
+    text-align:center;
+}
+
+.flagged {
+    background-color: orange!important;
+}
+
+.grid div {
+    background-color: grey;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.grid div:hover {
+    background-color: black;
+}
