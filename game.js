@@ -1,9 +1,10 @@
-const tileSize = 20;   //Width of a tile (in pixels)
-const width = 30;      //Board width (in tiles)
-const height = 30;     //Board height (in tiles)
-const bombAmount = 100; //Amount of bombs
+const tileSize = 40;   //Width of a tile (in pixels)
+const width = 20;      //Board width (in tiles)
+const height = 20;     //Board height (in tiles)
+const bombAmount = 35; //Amount of bombs
 
 let board = []; //can be 'bomb' or 'empty'
+let lost = false; //This is for the broken ai to know when it lost
 
 //colors for the text of the number of surrounding bombs
 let colors = [
@@ -27,7 +28,7 @@ window.onload = function () {
     //Generates a random board
     const bombs = Array(bombAmount).fill('bomb');
     const empties = Array(width*height - bombAmount).fill('empty');
-    board = bombs.concat(empties).sort(() => Math.random() > 0.5);
+    board = bombs.concat(empties).sort(() => Math.random() > 0.5 ? 1 : -1);
 
     //Calculates surrounding amount of bombs for every non-bomb tile
     for (let id = 0; id < board.length; id++) {
@@ -87,7 +88,7 @@ function mousedown (event) {
 
 function reveal (id) {
     const element = document.getElementById(id);
-    if (element == null) console.log(id);
+    if (element == null) console.error(id + ' is null');
 
     //Checks if the tile has already been revealed
     if (element.classList.contains('clicked-bomb') ||
@@ -105,7 +106,7 @@ function reveal (id) {
     }
     else {
         element.classList.add('clicked-empty');
-
+        
         let number = parseInt(board[id]);
 
         element.innerHTML = number == 0 ? ' ' : '' + number;
@@ -143,7 +144,12 @@ function flag (id) {
         return;
     }
 
-    element.classList.add('flagged');
+    if (element.classList.contains('flagged')) {
+        element.classList.remove('flagged');
+    }
+    else {
+        element.classList.add('flagged');
+    }
     checkWin();
 }
 
@@ -167,6 +173,8 @@ function checkWin () {
 
 function lose () {
     //F
+    lost = true;
+    
     revealAll();
 
     const lose = document.createElement('h1');
@@ -188,4 +196,25 @@ function revealAll () {
             element.classList.add('clicked-empty');
         }
     }
+}
+
+function getNeighbours (id) {
+    let neighbours = [];
+
+    let startI = id % width == 0 ? 0 : -1;
+    let horizontalRun = id % width == width-1 ? 1 : 2;
+
+    let startJ = id < width ? 0 : -1;
+    let verticalRun = id > (width * (height-1))-1 ? 1 : 2;
+
+    for (let i = startI; i < horizontalRun; i++) {
+        for (let j = startJ; j < verticalRun; j++) {
+            let tileID = id + i;
+            tileID += j*width;
+
+            neighbours.push(tileID);
+        }
+    }
+
+    return neighbours;
 }

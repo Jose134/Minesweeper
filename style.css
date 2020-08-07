@@ -1,3 +1,11 @@
+body {
+    font-family: 'Recursive', sans-serif;
+}
+
+div {
+    transition: background-color 200ms;
+}
+
 .grid {
     margin-right: auto;
     margin-left: auto;
@@ -20,11 +28,11 @@
 }
 
 .grid div {
-    background-color: grey;
+    background-color: darkgray;
     margin-right: auto;
     margin-left: auto;
 }
 
 .grid div:hover {
-    background-color: black;
+    background-color: gray;
 }
