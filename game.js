@@ -102,6 +102,7 @@ function reveal (id) {
 
     if (board[id] == 'bomb') {
         element.classList.add('clicked-bomb');
+        element.innerHTML = '💥';
         lose();
     }
     else {
@@ -146,9 +147,11 @@ function flag (id) {
 
     if (element.classList.contains('flagged')) {
         element.classList.remove('flagged');
+        element.innerHTML = '';
     }
     else {
         element.classList.add('flagged');
+        element.innerHTML = '🚩';
     }
     checkWin();
 }

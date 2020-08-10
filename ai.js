@@ -23,7 +23,7 @@ async function run_ai () {
                 if (probabilities[lowest] != Infinity && probabilities[i] == Infinity) {
                     lowest = i;
                 }
-                if (!isFlag(id) && probabilities[i] >= 1 && probabilities[i] != Infinity) {
+                if (!isFlag(i) && probabilities[i] >= 1 && probabilities[i] != Infinity) {
                     flag(i);
                     flagCount++;
                 }
@@ -39,7 +39,7 @@ async function run_ai () {
 
         console.log('hey I got out of the loop');
         
-        while (!isUnrevealed(lowest) && !document.getElementById(lowest).classList.contains('flagged')) {
+        while (!isUnrevealed(lowest) && !isFlag(lowest)) {
             lowest++;
         }
         
@@ -84,7 +84,7 @@ function getRevealedTiles () {
 function getNeighbourFlagAmount (id) {
     let count = 0;
     getNeighbours(id).forEach(nId => {
-        if (isFlag(id)) {
+        if (isFlag(nId)) {
             count++;
         }
     });
@@ -149,7 +149,7 @@ function checkEmpties () {
     getRevealedTiles().forEach(tile => {
         if (getNeighbourFlagAmount(tile) == board[tile]) {
             getNeighbours(tile).filter(id => {
-                return isUnrevealed(id) && !document.getElementById(id).classList.contains('flagged');
+                return isUnrevealed(id) && !isFlag(id);
             }).forEach(id => {
                 reveal(id);
                 clicked++;

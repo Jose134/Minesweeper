@@ -15,22 +15,31 @@ div {
 }
 
 .clicked-bomb {
-    background-color: red!important;
+    /*background-color: #222!important;*/
+    background-color: black!important;
+    font-size: 2em;
 }
 
 .clicked-empty {
     background-color: black!important;
-    text-align:center;
 }
 
 .flagged {
-    background-color: orange!important;
+    /*background-color: #222!important;*/
+    background-color: black!important;
+    font-size: 1.5em;
+    transition: font-size 100ms;
+}
+
+.flagged:hover {
+    font-size: 1.8em;
 }
 
 .grid div {
     background-color: darkgray;
     margin-right: auto;
     margin-left: auto;
+    text-align:center;
 }
 
 .grid div:hover {
