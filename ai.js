@@ -7,8 +7,7 @@ async function run_ai () {
     let id = (Math.floor(Math.random() * board.length));
     reveal(id);
     
-    let finished = checkWin() || lost;
-    while (!finished) {
+    while (!gameFinished) {
         update_ai_board();
         
         let lowest = 0;
@@ -31,8 +30,7 @@ async function run_ai () {
 
         } while(flagCount != 0);
 
-        if (checkWin()) {
-            finished = true;
+        if (gameFinished) {
             break;
         }
         
@@ -44,8 +42,6 @@ async function run_ai () {
             lowest = [...Array(board.length).keys()].filter(id => { return !isUnrevealed() && !isFlag()})[0];
             reveal(lowest);
         }
-
-        finished = checkWin() || lost;
         
         await new Promise(r => setTimeout(r, 700));
     }

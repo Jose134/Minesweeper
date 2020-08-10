@@ -1,5 +1,6 @@
-body {
-    font-family: 'Recursive', sans-serif;
+html {
+    font-family: 'Recursive', sans-serif!important;
+    font-weight: 600!important;
 }
 
 div {
@@ -7,11 +8,11 @@ div {
 }
 
 .grid {
+    margin-top:10px;
     margin-right: auto;
     margin-left: auto;
     display: flex;
     flex-wrap: wrap;
-    background-color:magenta;
 }
 
 .clicked-bomb {
@@ -44,4 +45,45 @@ div {
 
 .grid div:hover {
     background-color: gray;
+}
+
+h1 {
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+    font-size: 2em;
+}
+
+/* https://www.arungudelli.com/tutorial/css/disable-text-selection-in-html-using-user-select-css-property/ */
+.disable-select {
+    user-select: none;        /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none;  /* Konqueror HTML */
+   -moz-user-select: none;    /* Firefox */
+   -ms-user-select: none;     /* Internet Explorer/Edge */
+}
+
+.controls {
+    margin-top: 10px;
+    margin-right: auto;
+    margin-left: auto;
+
+    font-size: 1.2em;
+}
+
+button {
+    font-size: inherit;
+}
+
+.settings {
+    padding:20px;
+
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    min-width: 100px;
+
+    border: 4px solid;
+    border-color: gray;
+    border-radius: 25px;
 }

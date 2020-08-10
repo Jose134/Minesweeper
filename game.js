@@ -1,10 +1,10 @@
-const tileSize = 40;   //Width of a tile (in pixels)
-const width = 20;      //Board width (in tiles)
-const height = 20;     //Board height (in tiles)
-const bombAmount = 35; //Amount of bombs
+let tileSize = 40;   //Width of a tile (in pixels)
+let width = 20;      //Board width (in tiles)
+let height = 20;     //Board height (in tiles)
+let bombAmount = 35; //Amount of bombs
 
 let board = []; //can be 'bomb' or 'empty'
-let lost = false; //This is for the broken ai to know when it lost
+let gameFinished = false;
 
 //colors for the text of the number of surrounding bombs
 let colors = [
@@ -12,18 +12,23 @@ let colors = [
     'blue',
     'green',
     'red',
-    'darkblue',
-    'darkred',
     'turquoise',
+    'darkred',
+    'magenta',
     'darkgrey',
     'grey'
 ]
 
-window.onload = function () {
+window.onload = startGame();
+
+function startGame () {
     const grid = document.getElementById('gridDiv');
 
     grid.style.width = tileSize * width + 'px';
     grid.style.height = tileSize * height + 'px';
+
+    document.getElementById('controls').style.width = grid.style.width;
+    document.getElementById('settings').style.width = grid.style.width;
 
     //Generates a random board
     const bombs = Array(bombAmount).fill('bomb');
@@ -62,7 +67,8 @@ window.onload = function () {
         const square = document.createElement('div');
         square.setAttribute('id', i);
         square.addEventListener('mousedown', mousedown);
-
+        
+        square.classList.add('disable-select');
         square.style.width = tileSize + 'px';
         square.style.height = tileSize + 'px';
         square.style.lineHeight = tileSize + 'px';
@@ -73,6 +79,8 @@ window.onload = function () {
 }
 
 function mousedown (event) {
+    if (gameFinished) return;
+
     //Gets the DOM element and id corresponding to the clicked tile
     let element = event.srcElement;
     let id = parseInt(element.id);
@@ -165,9 +173,11 @@ function checkWin () {
     }
 
     //User won!
+    gameFinished = true;
     revealAll(false);
 
     const victory = document.createElement('h1');
+    victory.id = 'victoryText';
     victory.innerText = "You Won";
     document.body.appendChild(victory);
 
@@ -176,11 +186,12 @@ function checkWin () {
 
 function lose () {
     //F
-    lost = true;
+    gameFinished = true;
     
     //revealAll();
 
     const lose = document.createElement('h1');
+    lose.id = 'loseText';
     lose.innerText = "You Lost";
     document.body.appendChild(lose);
 }
@@ -224,4 +235,17 @@ function getNeighbours (id) {
     }
 
     return neighbours;
+}
+
+function resetGame() {
+    gameFinished = false;
+    document.getElementById('gridDiv').innerHTML = '';
+
+    const victoryText = document.getElementById('victoryText');
+    const loseText = document.getElementById('loseText');
+
+    if (victoryText != null) victoryText.remove();
+    if (loseText != null) loseText.remove(); 
+
+    startGame();
 }

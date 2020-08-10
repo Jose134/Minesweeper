@@ -6,11 +6,41 @@
 
         <link rel="stylesheet" href="style.css">
         <link href="https://fonts.googleapis.com/css2?family=Recursive&display=swap" rel="stylesheet"> 
+    
+        <!--Materialized css: https://materializecss.com/about.html-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
     </head>
     <body>
         <div id="gridDiv" class="grid" oncontextmenu="return false"></div>
+        <div id="controls" class="controls">
+            <button class="waves-effect waves-light btn" onclick="resetGame()">Reset</button>
+            <button class="waves-effect waves-light btn" onclick="run_ai()">Run AI</button>
+            <button class="waves-effect waves-light btn" onclick="settingsClick()">Settings</button>
+        </div>
+
+        <div id="settings" class="settings" style="display:none">
+            <label for="width">Width:</label>
+            <input id="width" name="width" type="number" min=0>
+            <br><br>
+
+            <label for="height">Height:</label>
+            <input id="height" name="height" type="number" min=0>
+            <br><br>
+
+            <label for="bombs">Bombs:</label>
+            <input id="bombs" name="bombs" type="number" min=0>
+            <br><br>
+            
+            <button class="waves-effect waves-light btn" onclick="setSettings()">Set</button>
+        </div>
+
 
         <script src="game.js"></script>
         <script src="ai.js"></script>
+        <script src="settings.js"></script>
+
+        <!-- Materialized JavaScript -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </body>
 </html>
