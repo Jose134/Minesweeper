@@ -95,6 +95,8 @@ function mousedown (event) {
 }
 
 function reveal (id) {
+    let haveToCheckWin = false;
+
     const element = document.getElementById(id);
     if (element == null) console.error(id + ' is null');
 
@@ -106,7 +108,10 @@ function reveal (id) {
     }
 
     //Removes flag if it was set
-    if (element.classList.contains('flagged')) element.classList.remove('flagged');
+    if (element.classList.contains('flagged')) {
+        element.classList.remove('flagged');
+        haveToCheckWin = true;
+    }
 
     if (board[id] == 'bomb') {
         element.classList.add('clicked-bomb');
@@ -140,6 +145,10 @@ function reveal (id) {
                 }
             }
         }
+    }
+
+    if (haveToCheckWin) {
+        checkWin();
     }
 }
 

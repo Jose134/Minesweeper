@@ -1,13 +1,11 @@
-html {
-    font-family: 'Recursive', sans-serif!important;
-    font-weight: 600!important;
-}
-
 div {
     transition: background-color 200ms;
 }
 
 .grid {
+    font-family: 'Recursive', sans-serif!important;
+    font-weight: 600!important;
+
     margin-top:10px;
     margin-right: auto;
     margin-left: auto;
