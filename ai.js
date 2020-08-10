@@ -28,7 +28,6 @@ async function run_ai () {
                     flagCount++;
                 }
             }
-            console.log(flagCount);
 
         } while(flagCount != 0);
 
@@ -36,8 +35,6 @@ async function run_ai () {
             finished = true;
             break;
         }
-
-        console.log('hey I got out of the loop');
         
         while (!isUnrevealed(lowest) && !isFlag(lowest)) {
             lowest++;
