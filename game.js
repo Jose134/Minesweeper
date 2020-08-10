@@ -28,7 +28,7 @@ window.onload = function () {
     //Generates a random board
     const bombs = Array(bombAmount).fill('bomb');
     const empties = Array(width*height - bombAmount).fill('empty');
-    board = bombs.concat(empties).sort(() => Math.random() > 0.5 ? 1 : -1);
+    board = bombs.concat(empties).sort(() => Math.random() - 0.5);
 
     //Calculates surrounding amount of bombs for every non-bomb tile
     for (let id = 0; id < board.length; id++) {
@@ -162,7 +162,7 @@ function checkWin () {
     }
 
     //User won!
-    revealAll();
+    revealAll(false);
 
     const victory = document.createElement('h1');
     victory.innerText = "You Won";
@@ -175,16 +175,20 @@ function lose () {
     //F
     lost = true;
     
-    revealAll();
+    //revealAll();
 
     const lose = document.createElement('h1');
     lose.innerText = "You Lost";
     document.body.appendChild(lose);
 }
 
-function revealAll () {
+function revealAll (removeFlags) {
     for (let id = 0; id < board.length; id++) {
         const element = document.getElementById(id);
+
+        if (element.classList.contains('flagged') && removeFlags) {
+            element.classList.remove('flagged');
+        }
 
         if (board[id] == 'bomb' && !element.classList.contains('clicked-bomb')) {
             element.classList.add('clicked-bomb');
