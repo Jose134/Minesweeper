@@ -1,14 +1,14 @@
 let tileSize = 40;   //Width of a tile (in pixels)
 let width = 20;      //Board width (in tiles)
 let height = 20;     //Board height (in tiles)
-let bombAmount = 35; //Amount of bombs
+let mineAmount = 35; //Amount of mines
 
-let board = []; //can be 'bomb' or 'empty'
+let board = []; //can be 'mine' or 'empty'
 let gameFinished = false;
 
-//colors for the text of the number of surrounding bombs
+//colors for the text of the number of surrounding mines
 let colors = [
-    'white', //this one doesn't really matter since tiles with no surrounding bombs won't have text
+    'white', //this one doesn't really matter since tiles with no surrounding mines won't have text
     'blue',
     'green',
     'red',
@@ -22,26 +22,29 @@ let colors = [
 window.onload = startGame();
 
 function startGame () {
+    //Sets the size of the board according to our variables
     const grid = document.getElementById('gridDiv');
 
     grid.style.width = tileSize * width + 'px';
     grid.style.height = tileSize * height + 'px';
 
+    //We also need to set the width of these elements because styling
     document.getElementById('controls').style.width = grid.style.width;
     document.getElementById('settings').style.width = grid.style.width;
 
     //Generates a random board
-    const bombs = Array(bombAmount).fill('bomb');
-    const empties = Array(width*height - bombAmount).fill('empty');
-    board = bombs.concat(empties).sort(() => Math.random() - 0.5);
+    const mines = Array(mineAmount).fill('mine');
+    const empties = Array(width*height - mineAmount).fill('empty');
+    board = mines.concat(empties).sort(() => Math.random() - 0.5);
 
-    //Calculates surrounding amount of bombs for every non-bomb tile
+    //Calculates surrounding amount of mines for every non-mine tile
     for (let id = 0; id < board.length; id++) {
-        if (board[id] == 'bomb') continue;
+        if (board[id] == 'mine') continue;
 
-        let bombs = 0;
+        let mines = 0;
 
         //Obviously not copy-pasted from the reveal function
+        //(this is so that tiles on the border get properly calculated values)
         let startI = id % width == 0 ? 0 : -1;
         let horizontalRun = id % width == width-1 ? 1 : 2;
 
@@ -53,13 +56,13 @@ function startGame () {
                 let tileID = id + i;
                 tileID += j*width;
     
-                if(board[tileID] == 'bomb') {
-                    bombs++;
+                if(board[tileID] == 'mine') {
+                    mines++;
                 }
             }
         }
 
-        board[id] = bombs;
+        board[id] = mines;
     }
 
     //Creates the tile divs
@@ -78,6 +81,7 @@ function startGame () {
 
 }
 
+//Handles the mousedown event
 function mousedown (event) {
     if (gameFinished) return;
 
@@ -86,9 +90,11 @@ function mousedown (event) {
     let id = parseInt(element.id);
 
     if (event.which == 1) {
+        //Left click
         reveal(id);
     }
     else if (event.which == 3) {
+        //Right click
         flag(id);
     }
     
@@ -101,7 +107,7 @@ function reveal (id) {
     if (element == null) console.error(id + ' is null');
 
     //Checks if the tile has already been revealed
-    if (element.classList.contains('clicked-bomb') ||
+    if (element.classList.contains('clicked-mine') ||
         element.classList.contains('clicked-empty')
     ) {
         return;
@@ -113,8 +119,8 @@ function reveal (id) {
         haveToCheckWin = true;
     }
 
-    if (board[id] == 'bomb') {
-        element.classList.add('clicked-bomb');
+    if (board[id] == 'mine') {
+        element.classList.add('clicked-mine');
         element.innerHTML = '💥';
         lose();
     }
@@ -129,6 +135,7 @@ function reveal (id) {
 
     //Reveals surrounding tiles
     if (board[id] == 0) {
+        //To make the tiles on the borders of the board work we calculate the start and run values of the loops for both directions.
         let startI = id % width == 0 ? 0 : -1;
         let horizontalRun = id % width == width-1 ? 1 : 2;
 
@@ -140,23 +147,25 @@ function reveal (id) {
                 let tileID = id + i;
                 tileID += j*width;
 
-                if(board[tileID] != 'bomb') {
+                if(board[tileID] != 'mine') {
                     reveal(tileID);
                 }
             }
         }
     }
 
+    //If we clicked on a tile that was flagged we might have won because we updated the number of flags on the board
     if (haveToCheckWin) {
         checkWin();
     }
 }
 
+//Marks the given tile with a flag, if the tile already had a flag it gets removed instead
 function flag (id) {
     const element = document.getElementById(id);
 
     //Checks if the tile has already been revealed
-    if (element.classList.contains('clicked-bomb') ||
+    if (element.classList.contains('clicked-mine') ||
         element.classList.contains('clicked-empty')
     ) {
         return;
@@ -170,6 +179,7 @@ function flag (id) {
         element.classList.add('flagged');
         element.innerHTML = '🚩';
     }
+
     checkWin();
 }
 
@@ -177,28 +187,26 @@ function checkWin () {
     for (let id = 0; id < board.length; id++) {
         const element = document.getElementById(id);
         
-        if (board[id] == 'bomb' && !element.classList.contains('flagged')) return false;
-        if (board[id] != 'bomb' && element.classList.contains('flagged'))  return false;
+        if (board[id] == 'mine' && !element.classList.contains('flagged')) return false;
+        if (board[id] != 'mine' && element.classList.contains('flagged'))  return false;
     }
 
     //User won!
     gameFinished = true;
     revealAll(false);
 
+    //Creates a victory text
     const victory = document.createElement('h1');
     victory.id = 'victoryText';
     victory.innerText = "You Won";
     document.body.appendChild(victory);
-
-    return true;
 }
 
 function lose () {
     //F
     gameFinished = true;
-    
-    //revealAll();
 
+    //Creates a lose text
     const lose = document.createElement('h1');
     lose.id = 'loseText';
     lose.innerText = "You Lost";
@@ -213,10 +221,10 @@ function revealAll (removeFlags) {
             element.classList.remove('flagged');
         }
 
-        if (board[id] == 'bomb' && !element.classList.contains('clicked-bomb')) {
-            element.classList.add('clicked-bomb');
+        if (board[id] == 'mine' && !element.classList.contains('clicked-mine')) {
+            element.classList.add('clicked-mine');
         } 
-        else if (board[id] != 'bomb' && !element.classList.contains('clicked-empty')) {
+        else if (board[id] != 'mine' && !element.classList.contains('clicked-empty')) {
             let number = parseInt(board[id]);
             element.innerHTML = number == 0 ? ' ' : '' + number;
             element.style.color = colors[number];
@@ -228,6 +236,7 @@ function revealAll (removeFlags) {
 function getNeighbours (id) {
     let neighbours = [];
 
+    //This piece of code again xD
     let startI = id % width == 0 ? 0 : -1;
     let horizontalRun = id % width == width-1 ? 1 : 2;
 

@@ -13,7 +13,7 @@ div {
     flex-wrap: wrap;
 }
 
-.clicked-bomb {
+.clicked-mine {
     /*background-color: #222!important;*/
     background-color: black!important;
     font-size: 2em;
