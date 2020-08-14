@@ -39,7 +39,7 @@ async function run_ai () {
         }
         
         if(checkEmpties() == 0) {
-            lowest = [...Array(board.length).keys()].filter(id => { return isUnrevealed(id) && !isFlag(id)})[0];
+            lowest = [...Array(board.length).keys()].filter(id => { return isUnrevealed(id) && !isFlag(id)}).sort(() => Math.random() - 0.5)[0];
             console.log(lowest);
             reveal(lowest);
         }
@@ -49,8 +49,6 @@ async function run_ai () {
 }
 
 function isUnrevealed (id) {
-    if (document.getElementById(id) == null) console.log(id);
-
     const classes = document.getElementById(id).classList;
 
     return !classes.contains('clicked-bomb')  &&
